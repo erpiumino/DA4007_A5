@@ -1,7 +1,7 @@
 CXX      = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra -pedantic -g
 
-slm: main.cpp
+slm: src/main.cpp
 	$(CXX) $(CXXFLAGS) -o slm src/main.cpp
 
 clean:
