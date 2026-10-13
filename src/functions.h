@@ -4,11 +4,13 @@
 #include <random>
 #include <cstdlib>
 #include <stdexcept>
+#include <typeinfo>
 
 using namespace std;
 
 double parse_a(const string& argv);
 int parse_f(const string& argv);
+string read_all(ifstream& file);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -44,4 +46,17 @@ int parse_f(const string& argv){
         throw invalid_argument("option k requires a non-negative integer number, got '" + argv + "' instead");
 
     return k;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+string read_all(ifstream& file){
+    
+    string lines, tot;
+    while(getline(file, lines)){
+        tot+=lines;
+        if (!file.eof())
+            tot+='\n';
+    }
+    return tot;
 }
