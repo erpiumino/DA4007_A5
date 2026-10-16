@@ -22,7 +22,7 @@ public:
 
     // Methods (to get variables)
     int         get_k()         const { return k_; }
-    double      get_alpha()     const { return a_; }
+    double      get_a()     const { return a_; }
     std::string get_file_tot()  const { return file_tot_; }
     int         get_length()    const { return length_; }
 };
