@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <random>
 #include <string>
 #include <vector>
 #include <cmath>
@@ -7,7 +8,7 @@
 class Vocabulary{
 
 private:
-    int k_;
+    size_t k_;
     double a_;
     std::string file_tot_;
     std::string c_;
@@ -18,8 +19,11 @@ private:
 
 public:
     // Constructor
-    Vocabulary(int k, double a, std::string total_file);
+    Vocabulary(size_t k, double a, std::string total_file);
 
     // Methods
-    double probability();
+    void kgram();
+    void alphabet();
+    void freq_foll();
+    std::string generate(size_t output_length, std::default_random_engine& rng) const;
 };

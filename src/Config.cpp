@@ -12,36 +12,36 @@ using namespace std;
 
 Config::Config(int argc, char* argv[]) : k_(0), a_(0), file_tot_(""){
 
-    //1.1 Check number of inputs
+    //Check number of inputs
     if (argc != 4 && argc != 6)
         throw invalid_argument("invalid number of arguments.\nExample of usage:" + string(argv[0]) + " (-a a) k input.txt char_number\nFlag -a is not mandatory");
     
-    //1.2 Check if -a flag is present and the value of a 
+    //Check if -a flag is present and the value of a 
     if (argc == 6 && string(argv[1]) == "-a")
         a_ = parse_a(argv[2]);
     if (argc == 6 && string(argv[1]) != "-a")
         throw invalid_argument("unkown option. Expected -a, got '" + string(argv[1]) + "' instead");
 
-    //1.3 Check the value of k
-    k_ = (argc == 4) ? parse_pos(argv[1]) : parse_pos(argv[3]);
+    //Check the value of k
+    k_ = (argc == 4) ? parse_pos(argv[1], "k (word size)") : parse_pos(argv[3], "k (word size)");
 
-    //1.4 Assign file name at the right option based on the usage
+    //Assign file name at the right option based on the usage
     char* file_option = (argc == 4) ? argv[2] : argv[4];
     ifstream file(file_option);
 
-    //1.5 Check if the opening goes right
+    //Check if the opening goes right
     if (!file)
         throw runtime_error("cannot open file '" + string(file_option) + "'");
     
-    //1.6 Check file total length
+    //Check file total length
     file_tot_ = read_all(file);
     if (file_tot_.length() < k_+1)
         throw runtime_error("training text too short, must contain " + to_string(k_+1) + " chars at least, " + to_string(file_tot_.length()) + " found instead");
 
-    //1.7 Assign length of output and check it's bigger thank k
-    length_ = (argc == 4) ? parse_pos(argv[3]) : parse_pos(argv[5]);
+    //Assign length of output and check it's bigger thank k
+    length_ = (argc == 4) ? parse_pos(argv[3], "c (output length)") : parse_pos(argv[5], "c (output length)");
     if (length_ < k_)
-        throw invalid_argument("invalid output length number. Expected bigger than " + to_string(k_) + ", got " + to_string(length_) + " instead"); 
+        throw invalid_argument("invalid output length number. Expected " + to_string(k_) + " at least, got " + to_string(length_) + " instead"); 
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,7 +66,7 @@ double Config::parse_a(const string& argv){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int Config::parse_pos(const string& argv){
+int Config::parse_pos(const string& argv, string type){
 
     int k = -1;
     size_t size = 0;
@@ -74,10 +74,10 @@ int Config::parse_pos(const string& argv){
     try{
         k = stoi(argv, &size);
     }catch (const exception&) {
-        throw invalid_argument("option k requires a non-negative integer number, got '" + argv + "' instead");
+        throw invalid_argument("option " + type + " requires a positive integer, got '" + argv + "' instead");
     }
-    if (size != argv.size() || k<0)
-        throw invalid_argument("option k requires a non-negative integer number, got '" + argv + "' instead");
+    if (size != argv.size() || k<=0)
+        throw invalid_argument("option " + type + " requires a positive integer, got '" + argv + "' instead");
 
     return k;
 }
